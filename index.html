@@ -442,12 +442,49 @@
       }));
     }
 
-    // 문제 섞기 기능
-    function shuffleQuestions() {
+    // 새로운 사이클(N회독) 시작 함수 (풀이 내역만 초기화, 오답 노트는 유지)
+    function startNewCycle() {
+      displayOrder.forEach(id => {
+        userAnswers[id].status = 'none';
+        userAnswers[id].text = '';
+        // userAnswers[id].isIncorrect 와 attempts 는 복습을 위해 유지합니다.
+      });
+      
       for (let i = displayOrder.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [displayOrder[i], displayOrder[j]] = [displayOrder[j], displayOrder[i]];
       }
+      
+      currentIndex = 0;
+      saveData();
+      renderQuiz();
+      
+      if (document.getElementById('incorrect-section').style.display === 'block') {
+        renderIncorrectNotes();
+      }
+    }
+
+    // 스마트 문제 섞기 기능 (안 푼 문제 우선 배치)
+    function shuffleQuestions() {
+      // 1. 안 푼 문제와 이미 푼(정답/자동공개) 문제 분리
+      let unsolved = displayOrder.filter(id => userAnswers[id].status !== 'correct' && userAnswers[id].status !== 'revealed');
+      let solved = displayOrder.filter(id => userAnswers[id].status === 'correct' || userAnswers[id].status === 'revealed');
+
+      if (unsolved.length === 0 && displayOrder.length > 0) {
+        if(confirm("🎉 모든 단어 학습을 완료했습니다! (1회독 완료)\n\n풀이 기록을 지우고 다시 처음부터 시작하시겠습니까?\n(※ 오답 노트 기록은 복습을 위해 그대로 유지됩니다.)")) {
+          startNewCycle();
+        }
+        return;
+      }
+
+      // 2. 안 푼 문제들만 섞기
+      for (let i = unsolved.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [unsolved[i], unsolved[j]] = [unsolved[j], unsolved[i]];
+      }
+
+      // 3. 안 푼 문제를 앞에, 푼 문제를 뒤에 배치
+      displayOrder = [...unsolved, ...solved];
       currentIndex = 0;
       saveData();
       renderQuiz();
@@ -561,13 +598,32 @@
       }
 
       currentIndex = endIndex;
-      stats.innerText = `총 문항 수: ${displayOrder.length}개 | 현재 진행: ${currentIndex}개`;
+      
+      // 전체 풀이 완료 상태 체크
+      let unsolvedCount = displayOrder.filter(id => userAnswers[id].status !== 'correct' && userAnswers[id].status !== 'revealed').length;
 
-      if (currentIndex >= displayOrder.length) {
+      stats.innerText = `총 문항 수: ${displayOrder.length}개 | 현재 진행: ${currentIndex}개 | 남은 문제: ${unsolvedCount}개`;
+
+      // 하단 더보기/재시작 버튼 동적 처리
+      if (unsolvedCount === 0 && displayOrder.length > 0) {
+        loadMoreBtn.style.display = 'block';
+        loadMoreBtn.style.background = '#4CAF50';
+        loadMoreBtn.innerText = "🔄 1회독 완료! 새로운 사이클 시작하기";
+        loadMoreBtn.onclick = function() {
+          startNewCycle();
+          loadMoreBtn.onclick = loadMore;
+          loadMoreBtn.innerText = "+ 10문제 더 풀기";
+          loadMoreBtn.style.background = '#95a5a6';
+        };
+      } else if (currentIndex >= displayOrder.length) {
         loadMoreBtn.style.display = 'none';
       } else {
         loadMoreBtn.style.display = 'block';
+        loadMoreBtn.onclick = loadMore;
+        loadMoreBtn.innerText = "+ 10문제 더 풀기";
+        loadMoreBtn.style.background = '#95a5a6';
       }
+      
       saveData();
     }
 
