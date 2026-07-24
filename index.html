@@ -456,9 +456,8 @@
         [displayOrder[i], displayOrder[j]] = [displayOrder[j], displayOrder[i]];
       }
       
-      currentIndex = 0;
       saveData();
-      renderQuiz();
+      renderQuiz('reset');
       
       if (document.getElementById('incorrect-section').style.display === 'block') {
         renderIncorrectNotes();
@@ -486,9 +485,8 @@
 
       // 3. 안 푼 문제를 앞에, 푼 문제를 뒤에 배치
       displayOrder = [...unsolved, ...solved];
-      currentIndex = 0;
       saveData();
-      renderQuiz();
+      renderQuiz('reset');
     }
 
     // 전체 초기화 기능
@@ -497,9 +495,8 @@
         displayOrder.forEach(id => {
           userAnswers[id] = { status: 'none', attempts: 0, text: '', isIncorrect: false };
         });
-        currentIndex = 0;
         saveData();
-        renderQuiz();
+        renderQuiz('reset');
         if (document.getElementById('incorrect-section').style.display === 'block') {
           renderIncorrectNotes();
         }
@@ -523,11 +520,11 @@
       const match = item.sentence.match(/\*([^*]+)\*/);
       const exactAnswer = match ? match[1] : item.answer;
       
-      const state = userAnswers[item.id];
+      const state = userAnswers[item.id] || { status: 'none', attempts: 0, text: '' };
       
-      // ⭐️ 오답 횟수에 비례하여 힌트 길이 증가 (기본 1글자 -> 틀릴 때마다 1글자씩 추가)
+      // ⭐️ 오답 횟수에 비례하여 힌트 길이 증가 (접두사가 'inc-' 인 오답노트 탭에서는 증가시키지 않음)
       let hintLength = 1;
-      if (state.attempts > 0 && state.status !== 'correct' && state.status !== 'revealed') {
+      if (prefix !== "inc-" && state.attempts > 0 && state.status !== 'correct' && state.status !== 'revealed') {
         hintLength = state.attempts + 1;
       }
       const hint = exactAnswer.substring(0, hintLength);
@@ -561,26 +558,28 @@
         userAnswers[id].text = '';
       });
       
-      saveData();
+     saveData();
       renderIncorrectNotes();
     }
-    // 2. 화면에 문제 렌더링 (학습 탭)
-    function renderQuiz(isLoadMore = false) {
+
+    // 2. 화면에 문제 렌더링 (학습 탭) - 상태 유지를 위해 action 파라미터 도입
+    function renderQuiz(action = 'refresh') {
       const container = document.getElementById('quiz-container');
       const loadMoreBtn = document.getElementById('btn-load-more');
       const stats = document.getElementById('db-stats');
 
-      // 처음 로드인지, 더보기 클릭인지에 따라 불러올 개수를 다르게 설정
-      let batchSize = isLoadMore ? MORE_BATCH : INITIAL_BATCH;
-
-      if (!isLoadMore) {
-        container.innerHTML = '';
-        currentIndex = 0;
+      // action: 'reset'(처음부터 15개), 'loadMore'(10개 추가), 'refresh'(현재 개수 유지하며 재렌더링)
+      if (action === 'reset') {
+        currentIndex = Math.min(INITIAL_BATCH, displayOrder.length);
+      } else if (action === 'loadMore') {
+        currentIndex = Math.min(currentIndex + MORE_BATCH, displayOrder.length);
+      } else if (action === 'refresh') {
+        if (currentIndex === 0) currentIndex = Math.min(INITIAL_BATCH, displayOrder.length);
       }
 
-      const endIndex = Math.min(currentIndex + batchSize, displayOrder.length);
+      container.innerHTML = '';
 
-      for (let i = currentIndex; i < endIndex; i++) {
+      for (let i = 0; i < currentIndex; i++) {
         const id = displayOrder[i];
         const item = db.find(q => q.id === id);
         if(!item) continue;
@@ -589,7 +588,7 @@
         card.className = 'question-card';
         
         const qHtml = generateQuestionHTML(item, "quiz-");
-        const state = userAnswers[id];
+        const state = userAnswers[id] || { status: 'none', attempts: 0 };
         
         // ⭐️ 문장 내 대소문자가 유지된 정답 추출 (힌트 제공용)
         const match = item.sentence.match(/\*([^*]+)\*/);
@@ -604,7 +603,6 @@
           msgHtml = `<span style="color:#f39c12;">⚠️ 3회 오답: 정답이 자동 공개되었습니다.</span>`;
           transClass += ' visible';
         } else if (state.attempts > 0) {
-          // ⭐️ 새로고침해도 힌트와 해설 상태가 유지되도록 처리
           const hintChars = exactAnswer.substring(0, state.attempts + 1);
           msgHtml = `<span style="color:#e74c3c;">❌ 오답입니다. (남은 기회: ${3 - state.attempts}번) &nbsp;💡 추가 힌트: <strong>${hintChars}</strong></span>`;
           transClass += ' visible'; 
@@ -618,10 +616,11 @@
         container.appendChild(card);
       }
 
-      currentIndex = endIndex;
-      
       // 전체 풀이 완료 상태 체크
-      let unsolvedCount = displayOrder.filter(id => userAnswers[id].status !== 'correct' && userAnswers[id].status !== 'revealed').length;
+      let unsolvedCount = displayOrder.filter(id => {
+         const s = userAnswers[id];
+         return s && s.status !== 'correct' && s.status !== 'revealed';
+      }).length;
 
       stats.innerText = `총 문항 수: ${displayOrder.length}개 | 현재 진행: ${currentIndex}개 | 남은 문제: ${unsolvedCount}개`;
 
@@ -649,7 +648,7 @@
     }
 
     function loadMore() {
-      renderQuiz(true);
+      renderQuiz('loadMore');
     }
 
     // 오답 노트 렌더링
@@ -746,7 +745,7 @@
           state.attempts += 1;
           state.isIncorrect = true; // 오답 등록
           
-          if (state.attempts >= 3) {
+           if (state.attempts >= 3) {
             state.status = 'revealed';
             state.text = correctAnswer;
             inputElement.value = correctAnswer; // 3회 오답 시 원본 대소문자 정답 표출
@@ -758,19 +757,22 @@
             inputElement.classList.add('incorrect');
             const remaining = 3 - state.attempts;
             
-            // ⭐️ 알파벳 단위 점진적 힌트 생성 및 Placeholder 업데이트
-            const hintChars = correctAnswer.substring(0, state.attempts + 1);
+            // ⭐️ 알파벳 단위 점진적 힌트 생성 (오답노트에서는 1글자 힌트만 유지)
+            const hintLength = (prefix === 'inc-') ? 1 : state.attempts + 1;
+            const hintChars = correctAnswer.substring(0, hintLength);
             inputElement.placeholder = hintChars; 
             
             translationEl.classList.add('visible'); // ⭐️ 1번이라도 틀리면 해설 즉시 표시
-            msgEl.innerHTML = `<span style="color:#e74c3c;">❌ 오답입니다. (남은 기회: ${remaining}번) &nbsp;💡 추가 힌트: <strong>${hintChars}</strong></span>`;
+            
+            if (prefix === 'inc-') {
+               msgEl.innerHTML = `<span style="color:#e74c3c;">❌ 다시 생각해보세요! (남은 기회: ${remaining}번)</span>`;
+            } else {
+               msgEl.innerHTML = `<span style="color:#e74c3c;">❌ 오답입니다. (남은 기회: ${remaining}번) &nbsp;💡 추가 힌트: <strong>${hintChars}</strong></span>`;
+            }
             
             setTimeout(() => { inputElement.classList.remove('incorrect'); }, 400);
           }
         }
-        saveData();
-      }
-    }
 
     // 4. 탭 전환
     function switchTab(tabId, btnElement) {
@@ -783,7 +785,7 @@
 
       if (tabId === 'quiz') {
         document.getElementById('quiz-section').style.display = 'block';
-        renderQuiz(); 
+        renderQuiz('refresh'); 
       } else if (tabId === 'incorrect') {
         document.getElementById('incorrect-section').style.display = 'block';
         renderIncorrectNotes();
