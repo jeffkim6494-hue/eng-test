@@ -242,7 +242,8 @@
       <button id="btn-load-more" class="btn-load-more" onclick="loadMore()">+ 10문제 더 풀기</button>
     </div>
 
-  <!-- 오답 노트 영역 -->
+    <!-- 오답 노트 영역 -->
+    <!-- 🚨 이전 코드에서 누락되었던 </div> 태그를 명확하게 닫아 화면 렌더링 버그 해결 -->
     <div id="incorrect-section" style="display: none;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
         <h3 style="margin: 0;">📝 내가 틀린 문제 (오답 노트)</h3>
@@ -253,6 +254,9 @@
       </div>
       <p style="color: #666; font-size: 14px; margin-bottom: 20px;">한 번이라도 틀렸던 문제들이 이곳에 자동으로 모입니다. 다시 풀어보며 완벽히 암기해 보세요!</p>
       <div id="incorrect-container">
+        <!-- 오답 문제가 동적으로 렌더링됩니다 -->
+      </div>
+    </div> <!-- ✅ 누락되었던 닫는 태그 복구 -->
 
     <!-- 문제 생성 및 파일 업로드 영역 (관리자용) -->
     <div id="admin-section" class="admin-section">
@@ -283,7 +287,6 @@
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
     // 1. 제공된 자료 기반 방대한 데이터베이스 (Raw Data)
-    // 원본 데이터를 그대로 관리하고 렌더링 시점에 HTML을 동적으로 생성합니다.
     let rawDatabase = [
       { answer: "function", sentence: "The *function* of a language item is its communicative purpose.", translation: "언어 요소의 기능은 의사소통 목적이다." },
       { answer: "acquisition", sentence: "*Acquisition* means the nonconscious and natural process of internalizing the rules of a language, as in first language acquisition.", translation: "습득이란 모국어 습득에서처럼 언어의 규칙을 무의식적이고 자연스럽게 내면화하는 과정을 의미한다." },
@@ -349,58 +352,7 @@
       { answer: "directed attention", sentence: "Deciding in advance to attend in general to a learning task and ignore irrelevant distractors is *directed attention*.", translation: "무관한 방해 요소를 무시하고 주의를 집중하기로 결심하는 전략" },
       { answer: "selective attention", sentence: "Deciding in advance to attend to specific aspects of language input is *selective attention*.", translation: "언어 입력의 특정 측면에 주의를 집중하기로 결심하는 전략" },
       { answer: "self-management", sentence: "Understanding the conditions that help one learn and arranging for them is *self-management*.", translation: "자신의 학습을 돕는 상황을 조성하는 전략" },
-      { answer: "functional planning", sentence: "Planning for and rehearsing linguistic components necessary for an upcoming task is *functional planning*.", translation: "언어 요소들을 계획하고 예행 연습하는 전략" },
-      { answer: "delayed production", sentence: "Consciously deciding to postpone speaking in order to learn initially through listening is *delayed production*.", translation: "말하기를 미루기로 의식적으로 결정하는 전략" },
-      { answer: "self-monitoring", sentence: "Correcting one's speech for accuracy in pronunciation, grammar, vocabulary is *self-monitoring*.", translation: "본인의 발화를 수정하는 전략" },
-      { answer: "self-evaluation", sentence: "Checking the outcomes of one's own language learning against an internal measure is *self-evaluation*.", translation: "학습 결과를 점검하는 전략" },
-      { answer: "cognitive strategies", sentence: "*Cognitive strategies* operate directly on incoming information and involve manipulation of the learning material itself.", translation: "들어오는 정보에 직접 관여하며 학습 자료 조작을 포함하는 인지 전략이다." },
-      { answer: "repetition", sentence: "Imitating a language model, including overt practice and silent rehearsal is *repetition*.", translation: "소리 내거나 속으로 반복적으로 모방하는 전략" },
-      { answer: "resourcing", sentence: "Using target language reference materials is *resourcing*.", translation: "목표 언어 참고 자료를 활용하는 전략" },
-      { answer: "translation", sentence: "Using the first language as a base for understanding and/or producing the second language is *translation*.", translation: "제1언어를 활용하는 전략" },
-      { answer: "grouping", sentence: "Reordering or reclassifying the material to be learned based on common attributes is *grouping*.", translation: "공통 속성을 근거로 다시 분류하는 전략" },
-      { answer: "note taking", sentence: "Writing down the main idea, important points, outline, or summary is *note taking*.", translation: "주요 내용을 기록하는 전략" },
-      { answer: "deduction", sentence: "Consciously applying rules to produce or understand the second language is *deduction*.", translation: "의식적으로 규칙을 적용하는 전략" },
-      { answer: "recombination", sentence: "Constructing a meaningful sentence by combining known elements in a new way is *recombination*.", translation: "알고 있는 요소들을 새롭게 조합하는 전략" },
-      { answer: "imagery", sentence: "Relating new information to visual concepts in memory via familiar visualizations is *imagery*.", translation: "시각적 개념과 연관시키는 전략" },
-      { answer: "auditory representation", sentence: "Retention of the sound or a similar sound for a word or phrase is *auditory representation*.", translation: "소리를 기억하는 전략" },
-      { answer: "keyword", sentence: "Remembering a new word by identifying a familiar word in the first language that sounds like it is *keyword* strategy.", translation: "모국어 유사 발음과 이미지를 통해 기억하는 전략" },
-      { answer: "contextualization", sentence: "Placing a word or phrase in a meaningful language sequence is *contextualization*.", translation: "유의미한 언어 단위 안에 배열하는 전략" },
-      { answer: "elaboration", sentence: "Relating new information to other concepts in memory is *elaboration*.", translation: "새로운 정보를 기존 개념과 연관시키는 전략" },
-      { answer: "transfer", sentence: "Using previously acquired linguistic knowledge to facilitate a new language learning task is *transfer*.", translation: "이전에 습득한 지식을 사용하는 전략" },
-      { answer: "inferencing", sentence: "Using available information to guess meanings of new items is *inferencing*.", translation: "정보를 사용해 의미를 추측하는 전략" },
-      { answer: "socioaffective strategies", sentence: "*Socioaffective strategies* involve interaction with another person or control over affect.", translation: "타인 상호작용 및 감정 관리를 아우르는 전략" },
-      { answer: "cooperation", sentence: "Working with one or more peers to obtain feedback and pool information is *cooperation*.", translation: "동료와 함께 협력하여 학습하는 전략" },
-      { answer: "question for clarification", sentence: "Asking a teacher or native speaker for repetition, paraphrasing, explanation is *question for clarification*.", translation: "교사나 원어민에게 명료화를 위해 질문하는 전략" },
-      { answer: "communication strategies", sentence: "*Communication strategies* are ways that learners get round the fact that they may not know how to say something.", translation: "의사소통 시 부족한 점을 보완하기 위한 전략" },
-      { answer: "circumlocution", sentence: "Describing or exemplifying the target object of action is *circumlocution*.", translation: "묘사하거나 예를 들어서 우회적으로 설명하는 전략" },
-      { answer: "approximation", sentence: "Using an alternative term which expresses the meaning as closely as possible is *approximation*.", translation: "최대한 근접한 대안적 용어를 사용하는 전략" },
-      { answer: "word-coinage", sentence: "Creating a nonexistent L2 word based on a supposed rule is *word-coinage*.", translation: "규칙을 바탕으로 존재하지 않는 단어를 창조하는 전략" },
-      { answer: "code-switching", sentence: "Using a L1 word with L1 pronunciation while speaking in L2 is *code-switching*.", translation: "발화 도중 모국어 단어를 섞어 쓰는 전략" },
-      { answer: "literal translation", sentence: "Translating literally a lexical item, idiom, or structure from L1 to L2 is *literal translation*.", translation: "모국어를 그대로 직역해서 표현하는 전략" },
-      { answer: "foreignizing", sentence: "Using a L1 word by adjusting it to L2 phonology or morphology is *foreignizing*.", translation: "모국어 단어를 제2언어 음운/형태론 체계에 맞춰 사용하는 전략" },
-      { answer: "integrative motivation", sentence: "*Integrative motivation* is driven by the desire of the learner to associate themselves with the culture of the speakers.", translation: "언어 화자들의 문화와 통합되고자 하는 동기" },
-      { answer: "instrumental motivation", sentence: "*Instrumental motivation* is essentially utilitarian in nature, for a fairly specific purpose.", translation: "실용적 보상을 가져다주는 목적을 위한 도구적 동기" },
-      { answer: "intrinsic motivation", sentence: "*Intrinsic motivation* refers to self-driven motives because the activity is inherently enjoyable.", translation: "활동 자체가 즐거워서 참여하는 내재적 동기" },
-      { answer: "extrinsic motivation", sentence: "*Extrinsic motivation* is fueled by the anticipation of a reward from outside and beyond the self.", translation: "외부 보상에 대한 기대로 자극되는 외재적 동기" },
-      { answer: "inhibition", sentence: "Those with weaker self-esteem maintain stronger walls of *inhibition* to protect a fragile ego.", translation: "자아를 보호하기 위해 유지하는 억제 심리의 벽" },
-      { answer: "facilitative anxiety", sentence: "*Facilitative anxiety* motivates learners to fight the new learning task and make extra efforts.", translation: "학습에 도전을 유도하는 긍정적/촉진적 불안" },
-      { answer: "debilitative anxiety", sentence: "*Debilitative anxiety* causes the learners to flee the learning task in order to avoid the source of anxiety.", translation: "학습으로부터 달아나게 만드는 부정적/저해적 불안" },
-      { answer: "risk-taking", sentence: "Willingness to gamble, to try out hunches about a language with the possibility of being wrong is *risk-taking*.", translation: "틀릴 가능성을 감수하며 직감을 시험해보려는 위험 감수 의지" },
-      { answer: "schemata", sentence: "*Schemata* are mental models or frameworks which organize information in the mind.", translation: "머릿속 정보를 구성하는 정신적인 모델 또는 배경지식의 틀" },
-      { answer: "content schemata", sentence: "Background information on the topic and relevant sociocultural knowledge is *content schemata*.", translation: "주제 및 사회문화적 지식에 관한 내용 스키마" },
-      { answer: "formal schemata", sentence: "Knowledge of how discourse is organized with respect to different genres is *formal schemata*.", translation: "담화 장르 구성 방식에 대한 형식 스키마" },
-      { answer: "personalization", sentence: "An activity which allows students to apply something they have learned to their own lives is *personalization*.", translation: "배운 것을 자신의 삶에 적용해보는 개인화 활동" },
-      { answer: "blended learning", sentence: "*Blended learning* is a combination of online and brick-and-mortar learning activities.", translation: "온라인 및 오프라인 교실 학습의 혼합형 학습" },
-      { answer: "flipped learning", sentence: "*Flipped learning* constitutes a kind of blended learning in which traditional classroom instruction is viewed at home.", translation: "집에서 미리 학습하고 교실에서 과제를 수행하는 거꾸로 학습" },
-      { answer: "bottom-up", sentence: "The *bottom-up* processing model assumes that listening is a process of decoding sounds from the smallest units.", translation: "가장 작은 단위부터 해독해 나가는 상향식 처리 방식" },
-      { answer: "top-down", sentence: "This *top-down* cognitive process implies learners draw on general knowledge to understand language.", translation: "일반 지식 및 배경 지식을 활용하는 하향식 인지 과정" },
-      { answer: "interlanguage", sentence: "*Interlanguage* is the term used to describe the grammatical system that a learner creates in the course of learning another language.", translation: "중간언어는 학습자가 다른 언어를 학습하는 과정에서 만들어내는 문법 체계이다." },
-      { answer: "fossilization", sentence: "Recurring errors of both grammar and pronunciation have become permanent features. This is referred to as *fossilization*.", translation: "반복되는 문법과 발음 오류가 영구적 특성이 되는 것을 화석화라고 한다." },
-      { answer: "explicit learning", sentence: "In *explicit learning*, the learner is aware of what has been learned.", translation: "명시적 학습에서 학습자는 자신이 무엇을 배웠는지 알고 있다." },
-      { answer: "implicit learning", sentence: "*Implicit learning* is learning without awareness of what has been learned.", translation: "암묵적 학습이란 학습 내용을 인지하지 못한 채 이루어지는 학습이다." },
-      { answer: "validity", sentence: "*Validity* concerns whether a test measures what it is intended to measure.", translation: "타당성은 검사가 측정하고자 하는 것을 제대로 측정하는지 여부와 관련이 있다." },
-      { answer: "reliability", sentence: "*Reliability* ensures consistent results across time and scorers.", translation: "신뢰성은 시간과 평가자에 관계없이 일관된 결과를 보장한다." },
-      { answer: "washback", sentence: "*Washback* describes the impact of testing on teaching and learning.", translation: "환류 효과는 시험이 교육과 학습에 미치는 영향을 설명한다." }
+      { answer: "functional planning", sentence: "Planning for and rehearsing linguistic components necessary for an upcoming task is *functional planning*.", translation: "언어 요소들을 계획하고 예행 연습하는 전략" }
     ];
 
     // --- 상태 관리 (로컬 스토리지 연동) ---
@@ -433,7 +385,7 @@
         saveData();
       }
       
-      renderQuiz();
+      renderQuiz('refresh');
     }
 
     // 상태 저장 함수
@@ -522,7 +474,8 @@
       
       const state = userAnswers[item.id] || { status: 'none', attempts: 0, text: '' };
       
-      // ⭐️ 오답 횟수에 비례하여 힌트 길이 증가 (접두사가 'inc-' 인 오답노트 탭에서는 증가시키지 않음)
+      // ⭐️ 오답 횟수에 비례하여 힌트 길이 증가 
+      // 피드백 반영: 접두사가 'inc-' 인 오답노트 탭에서는 증가시키지 않고 1글자로 고정합니다.
       let hintLength = 1;
       if (prefix !== "inc-" && state.attempts > 0 && state.status !== 'correct' && state.status !== 'revealed') {
         hintLength = state.attempts + 1;
@@ -558,7 +511,7 @@
         userAnswers[id].text = '';
       });
       
-     saveData();
+      saveData();
       renderIncorrectNotes();
     }
 
@@ -745,7 +698,7 @@
           state.attempts += 1;
           state.isIncorrect = true; // 오답 등록
           
-           if (state.attempts >= 3) {
+          if (state.attempts >= 3) {
             state.status = 'revealed';
             state.text = correctAnswer;
             inputElement.value = correctAnswer; // 3회 오답 시 원본 대소문자 정답 표출
@@ -757,13 +710,14 @@
             inputElement.classList.add('incorrect');
             const remaining = 3 - state.attempts;
             
-            // ⭐️ 알파벳 단위 점진적 힌트 생성 (오답노트에서는 1글자 힌트만 유지)
+            // ⭐️ 알파벳 단위 점진적 힌트 생성 (피드백 반영: 오답노트에서는 1글자 힌트만 유지)
             const hintLength = (prefix === 'inc-') ? 1 : state.attempts + 1;
             const hintChars = correctAnswer.substring(0, hintLength);
             inputElement.placeholder = hintChars; 
             
             translationEl.classList.add('visible'); // ⭐️ 1번이라도 틀리면 해설 즉시 표시
             
+            // 피드백 반영: 오답노트 탭(inc-)에서는 추가 힌트 텍스트(💡 추가 힌트: ~)를 지워줍니다.
             if (prefix === 'inc-') {
                msgEl.innerHTML = `<span style="color:#e74c3c;">❌ 다시 생각해보세요! (남은 기회: ${remaining}번)</span>`;
             } else {
@@ -773,6 +727,9 @@
             setTimeout(() => { inputElement.classList.remove('incorrect'); }, 400);
           }
         }
+        saveData();
+      }
+    }
 
     // 4. 탭 전환
     function switchTab(tabId, btnElement) {
@@ -794,7 +751,7 @@
       }
     }
 
-    // 5. 단일 텍스트 파싱 처리 (기존 로직 유지)
+    // 5. 단일 텍스트 파싱 처리
     function generateQuestionFromText() {
       const text = document.getElementById('admin-input').value;
       processTextData(text);
@@ -896,7 +853,9 @@
     }
 
     // 페이지 로드 시 최초 앱 실행
-    initApp();
+    window.onload = function() {
+      initApp();
+    };
   </script>
 </body>
 </html>
