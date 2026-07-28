@@ -230,7 +230,7 @@
     <!-- 학습 영역 -->
     <div id="quiz-section">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <div class="stats" id="db-stats" style="margin-bottom: 0;">총 문항 수: 0개 | 현재 진행: 0개</div>
+        <div class="stats" id="db-stats" style="margin-bottom: 0;">전체 문항 수: 0개 | 현재 진행: 0개</div>
         <div>
           <button class="btn-action" onclick="shuffleQuestions()">🔀 문제 섞기</button>
           <button class="btn-action" onclick="resetProgress()" style="background: #e74c3c;">🔄 전체 초기화</button>
@@ -243,7 +243,6 @@
     </div>
 
     <!-- 오답 노트 영역 -->
-    <!-- 🚨 이전 코드에서 누락되었던 </div> 태그를 명확하게 닫아 화면 렌더링 버그 해결 -->
     <div id="incorrect-section" style="display: none;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
         <h3 style="margin: 0;">📝 내가 틀린 문제 (오답 노트)</h3>
@@ -254,9 +253,9 @@
       </div>
       <p style="color: #666; font-size: 14px; margin-bottom: 20px;">한 번이라도 틀렸던 문제들이 이곳에 자동으로 모입니다. 다시 풀어보며 완벽히 암기해 보세요!</p>
       <div id="incorrect-container">
-        <!-- 오답 문제가 동적으로 렌더링됩니다 -->
+        <!-- 오답 문제가 렌더링됩니다 -->
       </div>
-    </div> <!-- ✅ 누락되었던 닫는 태그 복구 -->
+    </div>
 
     <!-- 문제 생성 및 파일 업로드 영역 (관리자용) -->
     <div id="admin-section" class="admin-section">
@@ -352,26 +351,83 @@
       { answer: "directed attention", sentence: "Deciding in advance to attend in general to a learning task and ignore irrelevant distractors is *directed attention*.", translation: "무관한 방해 요소를 무시하고 주의를 집중하기로 결심하는 전략" },
       { answer: "selective attention", sentence: "Deciding in advance to attend to specific aspects of language input is *selective attention*.", translation: "언어 입력의 특정 측면에 주의를 집중하기로 결심하는 전략" },
       { answer: "self-management", sentence: "Understanding the conditions that help one learn and arranging for them is *self-management*.", translation: "자신의 학습을 돕는 상황을 조성하는 전략" },
-      { answer: "functional planning", sentence: "Planning for and rehearsing linguistic components necessary for an upcoming task is *functional planning*.", translation: "언어 요소들을 계획하고 예행 연습하는 전략" }
+      { answer: "functional planning", sentence: "Planning for and rehearsing linguistic components necessary for an upcoming task is *functional planning*.", translation: "언어 요소들을 계획하고 예행 연습하는 전략" },
+      { answer: "delayed production", sentence: "Consciously deciding to postpone speaking in order to learn initially through listening is *delayed production*.", translation: "말하기를 미루기로 의식적으로 결정하는 전략" },
+      { answer: "self-monitoring", sentence: "Correcting one's speech for accuracy in pronunciation, grammar, vocabulary is *self-monitoring*.", translation: "본인의 발화를 수정하는 전략" },
+      { answer: "self-evaluation", sentence: "Checking the outcomes of one's own language learning against an internal measure is *self-evaluation*.", translation: "학습 결과를 점검하는 전략" },
+      { answer: "cognitive strategies", sentence: "*Cognitive strategies* operate directly on incoming information and involve manipulation of the learning material itself.", translation: "들어오는 정보에 직접 관여하며 학습 자료 조작을 포함하는 인지 전략이다." },
+      { answer: "repetition", sentence: "Imitating a language model, including overt practice and silent rehearsal is *repetition*.", translation: "소리 내거나 속으로 반복적으로 모방하는 전략" },
+      { answer: "resourcing", sentence: "Using target language reference materials is *resourcing*.", translation: "목표 언어 참고 자료를 활용하는 전략" },
+      { answer: "translation", sentence: "Using the first language as a base for understanding and/or producing the second language is *translation*.", translation: "제1언어를 활용하는 전략" },
+      { answer: "grouping", sentence: "Reordering or reclassifying the material to be learned based on common attributes is *grouping*.", translation: "공통 속성을 근거로 다시 분류하는 전략" },
+      { answer: "note taking", sentence: "Writing down the main idea, important points, outline, or summary is *note taking*.", translation: "주요 내용을 기록하는 전략" },
+      { answer: "deduction", sentence: "Consciously applying rules to produce or understand the second language is *deduction*.", translation: "의식적으로 규칙을 적용하는 전략" },
+      { answer: "recombination", sentence: "Constructing a meaningful sentence by combining known elements in a new way is *recombination*.", translation: "알고 있는 요소들을 새롭게 조합하는 전략" },
+      { answer: "imagery", sentence: "Relating new information to visual concepts in memory via familiar visualizations is *imagery*.", translation: "시각적 개념과 연관시키는 전략" },
+      { answer: "auditory representation", sentence: "Retention of the sound or a similar sound for a word or phrase is *auditory representation*.", translation: "소리를 기억하는 전략" },
+      { answer: "keyword", sentence: "Remembering a new word by identifying a familiar word in the first language that sounds like it is *keyword* strategy.", translation: "모국어 유사 발음과 이미지를 통해 기억하는 전략" },
+      { answer: "contextualization", sentence: "Placing a word or phrase in a meaningful language sequence is *contextualization*.", translation: "유의미한 언어 단위 안에 배열하는 전략" },
+      { answer: "elaboration", sentence: "Relating new information to other concepts in memory is *elaboration*.", translation: "새로운 정보를 기존 개념과 연관시키는 전략" },
+      { answer: "transfer", sentence: "Using previously acquired linguistic knowledge to facilitate a new language learning task is *transfer*.", translation: "이전에 습득한 지식을 사용하는 전략" },
+      { answer: "inferencing", sentence: "Using available information to guess meanings of new items is *inferencing*.", translation: "정보를 사용해 의미를 추측하는 전략" },
+      { answer: "socioaffective strategies", sentence: "*Socioaffective strategies* involve interaction with another person or control over affect.", translation: "타인 상호작용 및 감정 관리를 아우르는 전략" },
+      { answer: "cooperation", sentence: "Working with one or more peers to obtain feedback and pool information is *cooperation*.", translation: "동료와 함께 협력하여 학습하는 전략" },
+      { answer: "question for clarification", sentence: "Asking a teacher or native speaker for repetition, paraphrasing, explanation is *question for clarification*.", translation: "교사나 원어민에게 명료화를 위해 질문하는 전략" },
+      { answer: "communication strategies", sentence: "*Communication strategies* are ways that learners get round the fact that they may not know how to say something.", translation: "의사소통 시 부족한 점을 보완하기 위한 전략" },
+      { answer: "circumlocution", sentence: "Describing or exemplifying the target object of action is *circumlocution*.", translation: "묘사하거나 예를 들어서 우회적으로 설명하는 전략" },
+      { answer: "approximation", sentence: "Using an alternative term which expresses the meaning as closely as possible is *approximation*.", translation: "최대한 근접한 대안적 용어를 사용하는 전략" },
+      { answer: "word-coinage", sentence: "Creating a nonexistent L2 word based on a supposed rule is *word-coinage*.", translation: "규칙을 바탕으로 존재하지 않는 단어를 창조하는 전략" },
+      { answer: "code-switching", sentence: "Using a L1 word with L1 pronunciation while speaking in L2 is *code-switching*.", translation: "발화 도중 모국어 단어를 섞어 쓰는 전략" },
+      { answer: "literal translation", sentence: "Translating literally a lexical item, idiom, or structure from L1 to L2 is *literal translation*.", translation: "모국어를 그대로 직역해서 표현하는 전략" },
+      { answer: "foreignizing", sentence: "Using a L1 word by adjusting it to L2 phonology or morphology is *foreignizing*.", translation: "모국어 단어를 제2언어 음운/형태론 체계에 맞춰 사용하는 전략" },
+      { answer: "integrative motivation", sentence: "*Integrative motivation* is driven by the desire of the learner to associate themselves with the culture of the speakers.", translation: "언어 화자들의 문화와 통합되고자 하는 동기" },
+      { answer: "instrumental motivation", sentence: "*Instrumental motivation* is essentially utilitarian in nature, for a fairly specific purpose.", translation: "실용적 보상을 가져다주는 목적을 위한 도구적 동기" },
+      { answer: "intrinsic motivation", sentence: "*Intrinsic motivation* refers to self-driven motives because the activity is inherently enjoyable.", translation: "활동 자체가 즐거워서 참여하는 내재적 동기" },
+      { answer: "extrinsic motivation", sentence: "*Extrinsic motivation* is fueled by the anticipation of a reward from outside and beyond the self.", translation: "외부 보상에 대한 기대로 자극되는 외재적 동기" },
+      { answer: "inhibition", sentence: "Those with weaker self-esteem maintain stronger walls of *inhibition* to protect a fragile ego.", translation: "자아를 보호하기 위해 유지하는 억제 심리의 벽" },
+      { answer: "facilitative anxiety", sentence: "*Facilitative anxiety* motivates learners to fight the new learning task and make extra efforts.", translation: "학습에 도전을 유도하는 긍정적/촉진적 불안" },
+      { answer: "debilitative anxiety", sentence: "*Debilitative anxiety* causes the learners to flee the learning task in order to avoid the source of anxiety.", translation: "학습으로부터 달아나게 만드는 부정적/저해적 불안" },
+      { answer: "risk-taking", sentence: "Willingness to gamble, to try out hunches about a language with the possibility of being wrong is *risk-taking*.", translation: "틀릴 가능성을 감수하며 직감을 시험해보려는 위험 감수 의지" },
+      { answer: "schemata", sentence: "*Schemata* are mental models or frameworks which organize information in the mind.", translation: "머릿속 정보를 구성하는 정신적인 모델 또는 배경지식의 틀" },
+      { answer: "content schemata", sentence: "Background information on the topic and relevant sociocultural knowledge is *content schemata*.", translation: "주제 및 사회문화적 지식에 관한 내용 스키마" },
+      { answer: "formal schemata", sentence: "Knowledge of how discourse is organized with respect to different genres is *formal schemata*.", translation: "담화 장르 구성 방식에 대한 형식 스키마" },
+      { answer: "personalization", sentence: "An activity which allows students to apply something they have learned to their own lives is *personalization*.", translation: "배운 것을 자신의 삶에 적용해보는 개인화 활동" },
+      { answer: "blended learning", sentence: "*Blended learning* is a combination of online and brick-and-mortar learning activities.", translation: "온라인 및 오프라인 교실 학습의 혼합형 학습" },
+      { answer: "flipped learning", sentence: "*Flipped learning* constitutes a kind of blended learning in which traditional classroom instruction is viewed at home.", translation: "집에서 미리 학습하고 교실에서 과제를 수행하는 거꾸로 학습" },
+      { answer: "bottom-up", sentence: "The *bottom-up* processing model assumes that listening is a process of decoding sounds from the smallest units.", translation: "가장 작은 단위부터 해독해 나가는 상향식 처리 방식" },
+      { answer: "top-down", sentence: "This *top-down* cognitive process implies learners draw on general knowledge to understand language.", translation: "일반 지식 및 배경 지식을 활용하는 하향식 인지 과정" },
+      { answer: "interlanguage", sentence: "*Interlanguage* is the term used to describe the grammatical system that a learner creates in the course of learning another language.", translation: "중간언어는 학습자가 다른 언어를 학습하는 과정에서 만들어내는 문법 체계이다." },
+      { answer: "fossilization", sentence: "Recurring errors of both grammar and pronunciation have become permanent features. This is referred to as *fossilization*.", translation: "반복되는 문법과 발음 오류가 영구적 특성이 되는 것을 화석화라고 한다." },
+      { answer: "explicit learning", sentence: "In *explicit learning*, the learner is aware of what has been learned.", translation: "명시적 학습에서 학습자는 자신이 무엇을 배웠는지 알고 있다." },
+      { answer: "implicit learning", sentence: "*Implicit learning* is learning without awareness of what has been learned.", translation: "암묵적 학습이란 학습 내용을 인지하지 못한 채 이루어지는 학습이다." },
+      { answer: "validity", sentence: "*Validity* concerns whether a test measures what it is intended to measure.", translation: "타당성은 검사가 측정하고자 하는 것을 제대로 측정하는지 여부와 관련이 있다." },
+      { answer: "reliability", sentence: "*Reliability* ensures consistent results across time and scorers.", translation: "신뢰성은 시간과 평가자에 관계없이 일관된 결과를 보장한다." },
+      { answer: "washback", sentence: "*Washback* describes the impact of testing on teaching and learning.", translation: "환류 효과는 시험이 교육과 학습에 미치는 영향을 설명한다." }
     ];
 
-    // --- 상태 관리 (로컬 스토리지 연동) ---
     let db = []; // 고유 ID가 부여된 전체 문제 배열
-    let displayOrder = []; // 현재 화면에 보여질 문제 ID 순서 배열
-    let userAnswers = {}; // 사용자 풀이 기록 (key: id, value: { status, attempts, text, isIncorrect })
+    let displayOrder = []; // 현재 화면에 보여질 "안 푼 문제" ID 순서 배열
+    let userAnswers = {}; // 사용자 풀이 기록 (key: id, value: { status, attempts, totalAttempts, text, isIncorrect })
     let currentIndex = 0;
     const INITIAL_BATCH = 15; // 첫 화면에 보여줄 하루 루틴 문제 수
     const MORE_BATCH = 10; // 추가 버튼 클릭 시 로드할 문제 수
 
     // 앱 초기화 함수 (페이지 로드 시 실행)
     function initApp() {
-      const savedData = localStorage.getItem('aidu_quiz_app_v2');
+      const savedData = localStorage.getItem('aidu_quiz_app_v3');
       if (savedData) {
         const parsed = JSON.parse(savedData);
         db = parsed.db || [];
         displayOrder = parsed.displayOrder || [];
         userAnswers = parsed.userAnswers || {};
         currentIndex = parsed.currentIndex || 0;
+
+        // 과거 버전에 totalAttempts 속성이 없는 경우 마이그레이션 처리
+        Object.keys(userAnswers).forEach(key => {
+            if (userAnswers[key].totalAttempts === undefined) {
+                userAnswers[key].totalAttempts = userAnswers[key].attempts || 0;
+            }
+        });
       }
 
       // 로컬 스토리지에 데이터가 없거나, 초기 로딩 시 기본 데이터셋 구축
@@ -380,7 +436,7 @@
           const id = 'q_' + Date.now() + '_' + index;
           db.push({ ...item, id: id });
           displayOrder.push(id);
-          userAnswers[id] = { status: 'none', attempts: 0, text: '', isIncorrect: false };
+          userAnswers[id] = { status: 'none', attempts: 0, totalAttempts: 0, text: '', isIncorrect: false };
         });
         saveData();
       }
@@ -390,24 +446,33 @@
 
     // 상태 저장 함수
     function saveData() {
-      localStorage.setItem('aidu_quiz_app_v2', JSON.stringify({
+      localStorage.setItem('aidu_quiz_app_v3', JSON.stringify({
         db, displayOrder, userAnswers, currentIndex
       }));
     }
 
-    // 새로운 사이클(N회독) 시작 함수 (풀이 내역만 초기화, 오답 노트는 유지)
+    // 새로운 사이클(N회독) 시작 함수 (현재 풀이 내역 초기화, 오답 누적 기록 유지)
     function startNewCycle() {
+      // 1. 모든 문제를 다시 큐에 넣습니다.
+      displayOrder = db.map(q => q.id);
+
+      // 2. 각 문제의 상태를 초기화하되 역대 틀린 횟수는 유지합니다.
       displayOrder.forEach(id => {
+        if (!userAnswers[id]) {
+            userAnswers[id] = { status: 'none', attempts: 0, totalAttempts: 0, text: '', isIncorrect: false };
+        }
         userAnswers[id].status = 'none';
         userAnswers[id].text = '';
-        // userAnswers[id].isIncorrect 와 attempts 는 복습을 위해 유지합니다.
+        userAnswers[id].attempts = 0; // 이번 사이클의 시도 횟수 초기화 (힌트 초기화 목적)
       });
       
+      // 3. 문제 섞기
       for (let i = displayOrder.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [displayOrder[i], displayOrder[j]] = [displayOrder[j], displayOrder[i]];
       }
       
+      currentIndex = 0;
       saveData();
       renderQuiz('reset');
       
@@ -416,27 +481,26 @@
       }
     }
 
-    // 스마트 문제 섞기 기능 (안 푼 문제 우선 배치)
+    // 스마트 문제 섞기 (이미 푼 문제는 대기열에서 아예 제외합니다)
     function shuffleQuestions() {
-      // 1. 안 푼 문제와 이미 푼(정답/자동공개) 문제 분리
-      let unsolved = displayOrder.filter(id => userAnswers[id].status !== 'correct' && userAnswers[id].status !== 'revealed');
-      let solved = displayOrder.filter(id => userAnswers[id].status === 'correct' || userAnswers[id].status === 'revealed');
+      // 전체 DB 중 아직 안 푼 문제만 필터링합니다. (이미 푼 문제는 제외)
+      let unsolved = db.map(q => q.id).filter(id => userAnswers[id].status !== 'correct' && userAnswers[id].status !== 'revealed');
 
-      if (unsolved.length === 0 && displayOrder.length > 0) {
+      if (unsolved.length === 0 && db.length > 0) {
         if(confirm("🎉 모든 단어 학습을 완료했습니다! (1회독 완료)\n\n풀이 기록을 지우고 다시 처음부터 시작하시겠습니까?\n(※ 오답 노트 기록은 복습을 위해 그대로 유지됩니다.)")) {
           startNewCycle();
         }
         return;
       }
 
-      // 2. 안 푼 문제들만 섞기
+      // 안 푼 문제들만 랜덤으로 섞습니다.
       for (let i = unsolved.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [unsolved[i], unsolved[j]] = [unsolved[j], unsolved[i]];
       }
 
-      // 3. 안 푼 문제를 앞에, 푼 문제를 뒤에 배치
-      displayOrder = [...unsolved, ...solved];
+      // 화면에 보여줄 큐(대기열)를 오직 안 푼 문제로만 갱신합니다.
+      displayOrder = unsolved; 
       saveData();
       renderQuiz('reset');
     }
@@ -444,9 +508,11 @@
     // 전체 초기화 기능
     function resetProgress() {
       if(confirm("모든 풀이 기록과 오답 노트가 초기화됩니다. 계속하시겠습니까?")) {
-        displayOrder.forEach(id => {
-          userAnswers[id] = { status: 'none', attempts: 0, text: '', isIncorrect: false };
+        db.forEach(q => {
+          userAnswers[q.id] = { status: 'none', attempts: 0, totalAttempts: 0, text: '', isIncorrect: false };
         });
+        displayOrder = db.map(q => q.id);
+        currentIndex = 0;
         saveData();
         renderQuiz('reset');
         if (document.getElementById('incorrect-section').style.display === 'block') {
@@ -458,24 +524,44 @@
     // 오답 기록만 초기화
     function resetIncorrect() {
       if(confirm("오답 기록을 모두 지우시겠습니까?")) {
-        displayOrder.forEach(id => {
-          userAnswers[id].isIncorrect = false;
+        db.forEach(q => {
+          if (userAnswers[q.id]) {
+            userAnswers[q.id].isIncorrect = false;
+            userAnswers[q.id].totalAttempts = 0;
+          }
         });
         saveData();
         renderIncorrectNotes();
       }
     }
 
-   // 문제 데이터 HTML 렌더링용 구조 변환
+    function retryIncorrectQuestions() {
+      // displayOrder가 아닌 전체 db에서 오답을 가져옵니다 (문제 섞기로 제외됐을 수 있으므로)
+      let incorrectIds = db.map(q => q.id).filter(id => userAnswers[id] && userAnswers[id].isIncorrect);
+      if (incorrectIds.length === 0) {
+        alert("다시 풀 오답이 없습니다.");
+        return;
+      }
+      
+      // 오답 목록에 있는 문제들의 입력 상태만 초기화 (누적 오답 횟수 및 위계는 유지)
+      incorrectIds.forEach(id => {
+        userAnswers[id].status = 'none';
+        userAnswers[id].text = '';
+        userAnswers[id].attempts = 0; // 재도전 시 힌트를 1글자부터 다시 주기 위해 리셋
+      });
+      
+      saveData();
+      renderIncorrectNotes();
+    }
+
+    // 문제 데이터 HTML 렌더링용 구조 변환
     function generateQuestionHTML(item, prefix="") {
-      // ⭐️ 문장 내에 포함된 원본 정답(대소문자 유지)을 추출합니다.
       const match = item.sentence.match(/\*([^*]+)\*/);
       const exactAnswer = match ? match[1] : item.answer;
       
-      const state = userAnswers[item.id] || { status: 'none', attempts: 0, text: '' };
+      const state = userAnswers[item.id] || { status: 'none', attempts: 0, totalAttempts: 0, text: '' };
       
-      // ⭐️ 오답 횟수에 비례하여 힌트 길이 증가 
-      // 피드백 반영: 접두사가 'inc-' 인 오답노트 탭에서는 증가시키지 않고 1글자로 고정합니다.
+      // ⭐️ 오답 횟수에 비례하여 힌트 길이 증가 (접두사가 'inc-' 인 오답노트 탭에서는 1글자 고정)
       let hintLength = 1;
       if (prefix !== "inc-" && state.attempts > 0 && state.status !== 'correct' && state.status !== 'revealed') {
         hintLength = state.attempts + 1;
@@ -498,30 +584,13 @@
       return item.sentence.replace(regex, inputHtml);
     }
 
-    function retryIncorrectQuestions() {
-      let incorrectIds = displayOrder.filter(id => userAnswers[id] && userAnswers[id].isIncorrect);
-      if (incorrectIds.length === 0) {
-        alert("다시 풀 오답이 없습니다.");
-        return;
-      }
-      
-      // 오답 목록에 있는 문제들의 입력 상태만 초기화 (오답 횟수 및 위계는 유지)
-      incorrectIds.forEach(id => {
-        userAnswers[id].status = 'none';
-        userAnswers[id].text = '';
-      });
-      
-      saveData();
-      renderIncorrectNotes();
-    }
-
-    // 2. 화면에 문제 렌더링 (학습 탭) - 상태 유지를 위해 action 파라미터 도입
+    // 화면에 문제 렌더링 (학습 탭)
     function renderQuiz(action = 'refresh') {
       const container = document.getElementById('quiz-container');
       const loadMoreBtn = document.getElementById('btn-load-more');
       const stats = document.getElementById('db-stats');
 
-      // action: 'reset'(처음부터 15개), 'loadMore'(10개 추가), 'refresh'(현재 개수 유지하며 재렌더링)
+      // action: 'reset'(처음부터), 'loadMore'(10개 추가), 'refresh'(현재 개수 유지)
       if (action === 'reset') {
         currentIndex = Math.min(INITIAL_BATCH, displayOrder.length);
       } else if (action === 'loadMore') {
@@ -543,7 +612,6 @@
         const qHtml = generateQuestionHTML(item, "quiz-");
         const state = userAnswers[id] || { status: 'none', attempts: 0 };
         
-        // ⭐️ 문장 내 대소문자가 유지된 정답 추출 (힌트 제공용)
         const match = item.sentence.match(/\*([^*]+)\*/);
         const exactAnswer = match ? match[1] : item.answer;
         
@@ -569,16 +637,16 @@
         container.appendChild(card);
       }
 
-      // 전체 풀이 완료 상태 체크
-      let unsolvedCount = displayOrder.filter(id => {
-         const s = userAnswers[id];
+      // 전체 풀이 완료 상태 체크 (전체 DB 기준)
+      let unsolvedCount = db.filter(q => {
+         const s = userAnswers[q.id];
          return s && s.status !== 'correct' && s.status !== 'revealed';
       }).length;
 
-      stats.innerText = `총 문항 수: ${displayOrder.length}개 | 현재 진행: ${currentIndex}개 | 남은 문제: ${unsolvedCount}개`;
+      stats.innerText = `전체 문항 수: ${db.length}개 | 현재 화면 대기열: ${displayOrder.length}개 | 안 푼 문제: ${unsolvedCount}개`;
 
       // 하단 더보기/재시작 버튼 동적 처리
-      if (unsolvedCount === 0 && displayOrder.length > 0) {
+      if (unsolvedCount === 0 && db.length > 0) {
         loadMoreBtn.style.display = 'block';
         loadMoreBtn.style.background = '#4CAF50';
         loadMoreBtn.innerText = "🔄 1회독 완료! 새로운 사이클 시작하기";
@@ -609,16 +677,16 @@
       const container = document.getElementById('incorrect-container');
       container.innerHTML = '';
       
-      // 오답 기록이 있는 ID만 필터링
-      let incorrectIds = displayOrder.filter(id => userAnswers[id] && userAnswers[id].isIncorrect);
+      // ⭐️ 전체 DB에서 오답 기록이 있는 ID 필터링
+      let incorrectIds = db.map(q => q.id).filter(id => userAnswers[id] && userAnswers[id].isIncorrect);
       
       if (incorrectIds.length === 0) {
         container.innerHTML = '<div style="text-align:center; padding: 40px; background:#fff; border-radius:10px; border: 1px solid #eee; color:#888;">아직 오답이 없습니다. 훌륭합니다! 🎉</div>';
         return;
       }
 
-      // ⭐️ 틀린 횟수(attempts) 기준 내림차순 정렬 (가장 많이 틀린 문제부터)
-      incorrectIds.sort((a, b) => userAnswers[b].attempts - userAnswers[a].attempts);
+      // ⭐️ 누적 틀린 횟수(totalAttempts) 기준 내림차순 정렬 (가장 많이 틀린 문제부터)
+      incorrectIds.sort((a, b) => userAnswers[b].totalAttempts - userAnswers[a].totalAttempts);
 
       incorrectIds.forEach((id, index) => {
         const item = db.find(q => q.id === id);
@@ -630,12 +698,10 @@
         const qHtml = generateQuestionHTML(item, "inc-");
         const state = userAnswers[id];
         
-        // ⭐️ 오답 노트에서도 문장 내 대소문자가 유지된 정답을 보여주기 위해 추출
         const match = item.sentence.match(/\*([^*]+)\*/);
         const exactAnswer = match ? match[1] : item.answer;
         
         let msgHtml = '';
-        // ⭐️ 오답노트에서는 복습을 돕기 위해 정답과 해설을 항상 표시합니다.
         let transClass = 'translation visible'; 
         
         if (state.status === 'correct') {
@@ -646,11 +712,10 @@
           msgHtml = `<span style="color:#e74c3c;">✍️ 빈칸을 다시 채워보며 복습하세요.</span>`;
         }
 
-        // ⭐️ 누적 오답 횟수 뱃지 UI 추가
         card.innerHTML = `
           <div style="margin-bottom: 12px;">
             <span style="background-color: #ffebeb; color: #e74c3c; padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; border: 1px solid #ffcdcd;">
-              🚨 누적 오답 횟수: ${state.attempts}회
+              🚨 누적 오답 횟수: ${state.totalAttempts}회
             </span>
           </div>
           <p class="question-text"><strong>오답 순위 ${index + 1}위.</strong> ${qHtml}</p>
@@ -666,7 +731,7 @@
       });
     }
 
-     // 3. 정답 확인 및 3회 오답 시 공개 로직
+    // 정답 확인 및 3회 오답 시 공개 로직
     function checkAnswer(event, inputElement) {
       if (event.key === 'Enter') {
         const userAnswer = inputElement.value.trim();
@@ -682,12 +747,12 @@
 
         inputElement.classList.remove('correct', 'incorrect', 'revealed');
         
-        // ⭐️ 입력값과 정답 모두 대소문자 무시 + 하이픈(-)을 공백으로 변환하여 유연하게 채점
+        // 입력값과 정답 모두 대소문자 무시 + 하이픈(-)을 공백으로 변환하여 유연하게 채점
         const normalize = (str) => str.toLowerCase().replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
         
         if (normalize(userAnswer) === normalize(correctAnswer)) {
-          state.text = correctAnswer; // 내부 저장 데이터를 원본 대소문자/하이픈 형태로 변경
-          inputElement.value = correctAnswer; // 사용자가 대충 쳤더라도 원본 형태로 UI 강제 교체 표출
+          state.text = correctAnswer; // 내부 저장 데이터를 원본 형태로 변경
+          inputElement.value = correctAnswer; // 원본 형태로 UI 강제 교체 표출
           
           state.status = 'correct';
           inputElement.classList.add('correct');
@@ -696,28 +761,28 @@
           msgEl.innerHTML = `<span style="color:#4CAF50;">✅ 정답입니다!</span>`;
         } else {
           state.attempts += 1;
+          state.totalAttempts = (state.totalAttempts || 0) + 1; // ⭐️ 역대 누적 오답 횟수 증가
           state.isIncorrect = true; // 오답 등록
           
           if (state.attempts >= 3) {
             state.status = 'revealed';
             state.text = correctAnswer;
-            inputElement.value = correctAnswer; // 3회 오답 시 원본 대소문자 정답 표출
+            inputElement.value = correctAnswer; 
             inputElement.classList.add('revealed');
             inputElement.disabled = true;
             translationEl.classList.add('visible');
-            msgEl.innerHTML = `<span style="color:#f39c12;">⚠️ 3회 오답: 정답이 자동 공개되었습니다.</span>`; // 대소문자 주의 안내문구 제거
+            msgEl.innerHTML = `<span style="color:#f39c12;">⚠️ 3회 오답: 정답이 자동 공개되었습니다.</span>`; 
           } else {
             inputElement.classList.add('incorrect');
             const remaining = 3 - state.attempts;
             
-            // ⭐️ 알파벳 단위 점진적 힌트 생성 (피드백 반영: 오답노트에서는 1글자 힌트만 유지)
+            // ⭐️ 알파벳 점진적 힌트 생성 (오답노트 탭(inc-) 에서는 추가 힌트를 주지 않음)
             const hintLength = (prefix === 'inc-') ? 1 : state.attempts + 1;
             const hintChars = correctAnswer.substring(0, hintLength);
             inputElement.placeholder = hintChars; 
             
-            translationEl.classList.add('visible'); // ⭐️ 1번이라도 틀리면 해설 즉시 표시
+            translationEl.classList.add('visible'); 
             
-            // 피드백 반영: 오답노트 탭(inc-)에서는 추가 힌트 텍스트(💡 추가 힌트: ~)를 지워줍니다.
             if (prefix === 'inc-') {
                msgEl.innerHTML = `<span style="color:#e74c3c;">❌ 다시 생각해보세요! (남은 기회: ${remaining}번)</span>`;
             } else {
@@ -731,7 +796,7 @@
       }
     }
 
-    // 4. 탭 전환
+    // 탭 전환
     function switchTab(tabId, btnElement) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       btnElement.classList.add('active');
@@ -751,14 +816,14 @@
       }
     }
 
-    // 5. 단일 텍스트 파싱 처리
+    // 단일 텍스트 파싱 처리 
     function generateQuestionFromText() {
       const text = document.getElementById('admin-input').value;
       processTextData(text);
       document.getElementById('admin-input').value = '';
     }
 
-    // 6. 다중 텍스트 일괄 파싱 로직 (엔터/줄바꿈 기준)
+    // 다중 텍스트 일괄 파싱 로직 (엔터/줄바꿈 기준)
     function processTextData(fullText) {
       if (!fullText.trim()) return;
       
@@ -783,24 +848,23 @@
             translation: translationPart
           });
           displayOrder.push(id);
-          userAnswers[id] = { status: 'none', attempts: 0, text: '', isIncorrect: false };
+          userAnswers[id] = { status: 'none', attempts: 0, totalAttempts: 0, text: '', isIncorrect: false };
           addedCount++;
         }
       });
 
       if (addedCount > 0) {
         saveData();
-        alert(`${addedCount}개의 문제가 성공적으로 데이터베이스에 추가되었습니다!`);
+        alert(`${addedCount}개의 문제가 성공적으로 추가되었습니다!`);
         if (document.getElementById('quiz-section').style.display === 'block') {
-          const stats = document.getElementById('db-stats');
-          stats.innerText = `총 문항 수: ${displayOrder.length}개 | 현재 진행: ${currentIndex}개`;
+          renderQuiz('refresh');
         }
       } else {
         alert('추가된 문제가 없습니다. 형식을 확인해주세요. (문장 *정답* / 해설)');
       }
     }
 
-    // 7. 파일 업로드 및 분석 (TXT, PDF 지원)
+    // 파일 업로드 및 분석 (TXT, PDF 지원)
     async function handleFileUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -839,13 +903,11 @@
       const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       let text = "";
 
-      // 모든 페이지 순회하며 텍스트 추출
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
         const textContent = await page.getTextContent();
         const pageText = textContent.items.map(item => item.str).join(' ');
         
-        // 텍스트 포맷팅을 위해 구두점(.)이나 슬래시(/) 기준으로 임의의 줄바꿈 추가
         const formattedPageText = pageText.replace(/(\/|\.) /g, '$1\n');
         text += formattedPageText + "\n";
       }
