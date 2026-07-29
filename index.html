@@ -452,6 +452,7 @@
         userAnswers[id].status = 'none';
         userAnswers[id].text = '';
         userAnswers[id].attempts = 0;
+        userAnswers[id].isRetrying = false; // 새 사이클 시작 시 재도전 플래그 초기화
         // userAnswers[id].isIncorrect 와 totalAttempts 는 역대 기록이므로 유지합니다.
       });
       
@@ -565,6 +566,7 @@
         userAnswers[id].status = 'none';
         userAnswers[id].text = '';
         userAnswers[id].attempts = 0; 
+        userAnswers[id].isRetrying = true; // 재도전 상태 활성화
       });
       
       saveData();
@@ -692,9 +694,9 @@
         
         let msgHtml = '';
         
-        // ⭐️ [버그픽스] 다시풀기를 눌러서 attempts가 0이 되고 status가 none이면 해설을 숨김(테스트 용도)
+        // ⭐️ 재도전 중(isRetrying)이며 아직 맞추지 못한 상태면 해설과 정답을 숨김
         let transClass = 'translation'; 
-        if (state.status === 'correct' || state.status === 'revealed' || state.attempts > 0) {
+        if (state.status === 'correct' || state.status === 'revealed' || (state.attempts > 0 && !state.isRetrying)) {
           transClass += ' visible';
         }
         
@@ -752,19 +754,28 @@
           inputElement.value = correctAnswer; // 사용자가 대충 쳤더라도 원본 형태로 UI 강제 교체 표출
           
           state.status = 'correct';
+          state.isRetrying = false; // 재도전 성공 시 플래그 해제
+
           inputElement.classList.add('correct');
           inputElement.disabled = true;
           translationEl.classList.add('visible'); // 정답 맞추면 해설 오픈
           msgEl.innerHTML = `<span style="color:#4CAF50;">✅ 정답입니다!</span>`;
         } else {
           state.attempts += 1;
-          // 이번에 틀렸으므로 역대 오답 횟수 1 증가 (존재하지 않으면 0에서 1로)
-          state.totalAttempts = (state.totalAttempts || 0) + 1;
-          state.isIncorrect = true; // 오답 등록
+          
+          // ⭐️ 학습하기 탭(quiz-)에서 틀렸을 때만 역대 누적 오답 횟수(totalAttempts) 증가
+          if (prefix !== 'inc-') {
+            // 이번에 틀렸으므로 역대 오답 횟수 1 증가 (존재하지 않으면 0에서 1로)
+            state.totalAttempts = (state.totalAttempts || 0) + 1;
+            state.isIncorrect = true; // 오답 등록
+            state.isRetrying = false; // 퀴즈 탭에서 풀면 재도전 플래그 해제
+          }
           
            if (state.attempts >= 3) {
             state.status = 'revealed';
             state.text = correctAnswer;
+            state.isRetrying = false; // 재도전 실패 시 플래그 해제
+
             inputElement.value = correctAnswer; // 3회 오답 시 원본 대소문자 정답 표출
             inputElement.classList.add('revealed');
             inputElement.disabled = true;
@@ -779,11 +790,11 @@
             const hintChars = correctAnswer.substring(0, hintLength);
             inputElement.placeholder = hintChars; 
             
-            translationEl.classList.add('visible'); // ⭐️ 1번이라도 틀리면 해설 즉시 표시
-            
             if (prefix === 'inc-') {
+               // ⭐️ 오답 노트에서는 1, 2회 오답 시 해설(정답 포함)을 바로 공개하지 않음
                msgEl.innerHTML = `<span style="color:#e74c3c;">❌ 다시 생각해보세요! (남은 기회: ${remaining}번)</span>`;
             } else {
+               translationEl.classList.add('visible'); // ⭐️ 학습하기 탭에서는 1번이라도 틀리면 해설 즉시 표시
                msgEl.innerHTML = `<span style="color:#e74c3c;">❌ 오답입니다. (남은 기회: ${remaining}번) &nbsp;💡 추가 힌트: <strong>${hintChars}</strong></span>`;
             }
             
@@ -791,12 +802,9 @@
           }
         }
         
-        // 엔터 칠 때마다 즉시 저장 및 해당 탭 UI 업데이트 (오답 횟수 뱃지 등을 위해)
+        // 엔터 칠 때마다 즉시 저장 
+        // ⭐️ 오답 노트에서 틀리더라도 순위(totalAttempts) 변동이 없으므로 재렌더링 제거 (입력 포커스 유지)
         saveData();
-        if (prefix === 'inc-') {
-          // 오답 노트에서 틀리면 순위가 바뀔 수 있으므로 재렌더링
-          renderIncorrectNotes();
-        }
       }
     }
 
